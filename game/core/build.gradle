@@ -1,0 +1,19 @@
+apply plugin: "java"
+
+dependencies {
+    compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+    if (!project.hasProperty('guice_version')) {
+        ext.guice_version = '4.0'
+    }
+    compile "com.google.inject:guice:${guice_version}:no_aop"
+}
+
+sourceCompatibility = 1.7
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+sourceSets.main.java.srcDirs = ["src/"]
+
+
+eclipse.project {
+    name = "game-core"
+}
