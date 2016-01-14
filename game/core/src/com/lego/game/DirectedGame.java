@@ -5,7 +5,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.lego.game.assets.SimpleGameAssetsResolver;
 import com.lego.game.screen.LegoScreen;
 import com.lego.game.screen.transition.ScreenTransition;
 
@@ -22,8 +21,8 @@ public abstract class DirectedGame extends LegoGame {
     private float time;
     private ScreenTransition screenTransition;
 
-    public DirectedGame(String bundleId, String storeId, SimpleGameAssetsResolver simpleGameAssetsResolver) {
-        super(bundleId, storeId, simpleGameAssetsResolver);
+    public DirectedGame(String bundleId, String storeId) {
+        super(bundleId, storeId);
     }
 
     public void setScreen(LegoScreen screen,

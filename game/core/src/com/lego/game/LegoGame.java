@@ -1,6 +1,5 @@
 package com.lego.game;
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Array;
@@ -10,7 +9,6 @@ import com.google.inject.Injector;
 import com.lego.game.analytics.GameAnalytics;
 import com.lego.game.analytics.GameAnalyticsErrorSeverity;
 import com.lego.game.assets.LegoAssetsResolver;
-import com.lego.game.screen.LegoScreen;
 import com.lego.game.screen.SplashScreen;
 import com.lego.game.utils.FPSRenderer;
 import com.lego.mvc.*;
@@ -25,7 +23,7 @@ import java.net.URLEncoder;
 /**
  * Created by sargis on 12/20/15.
  */
-public abstract class LegoGame implements ApplicationListener, View {
+public abstract class LegoGame implements LegoGameListener {
     private static final String TAG = LegoGame.class.getCanonicalName();
     private static final String LANGUAGE_ZH_HANS = "zh-hans";
     private static final String LANGUAGE_ZH_HANT = "zh-hant";
@@ -72,8 +70,6 @@ public abstract class LegoGame implements ApplicationListener, View {
             throw new RuntimeException("URLEncoder.encode() failed for " + s);
         }
     }
-
-    public abstract String getVersion();
 
     public String getLanguage() {
         String language = retrieveLanguage();
@@ -314,23 +310,44 @@ public abstract class LegoGame implements ApplicationListener, View {
 
     protected abstract void initScreens();
 
-    protected abstract String retrieveLanguage();
-
-    public abstract void showAlertDialog(String title, String message);
-
-    public abstract LegoScreen getScreen();
-
-    public abstract void setScreen(LegoScreen screen);
 
     public String getBundleId() {
         return bundleId;
     }
 
-    public abstract void twit(String message);
 
-    public abstract void twit(String message, String url);
+    @Override
+    public String getVersion() {
+        throw new IllegalStateException();
+    }
 
-    public abstract void openReviewPage();
+    @Override
+    public void showAlertDialog(final String title, final String message) {
+        throw new IllegalStateException();
+    }
 
-    public abstract void likeOnFB();
+    @Override
+    public String retrieveLanguage() {
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public void twit(String message) {
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public void twit(String message, String url) {
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public void openReviewPage() {
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public void likeOnFB() {
+        throw new IllegalStateException();
+    }
 }

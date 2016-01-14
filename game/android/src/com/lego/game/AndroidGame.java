@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import com.badlogic.gdx.Gdx;
-import com.lego.game.assets.SimpleGameAssetsResolver;
 
 import java.util.List;
 import java.util.Locale;
@@ -17,12 +16,13 @@ import java.util.Locale;
 /**
  * Created by sargis on 8/5/15.
  */
-public abstract class AndroidGame extends DirectedGame {
+public class AndroidGame extends LegoGameListenerAdapter {
 
     private final Activity activity;
 
-    public AndroidGame(String id, String storeId, SimpleGameAssetsResolver simpleGameAssetsResolver, Activity activity) {
-        super(id, storeId, simpleGameAssetsResolver);
+
+    public AndroidGame(LegoGame game, Activity activity) {
+        super(game);
         this.activity = activity;
     }
 
@@ -62,26 +62,34 @@ public abstract class AndroidGame extends DirectedGame {
     }
 
     @Override
-    protected void createGame() {
-        super.createGame();
+    public void create() {
+        game.create();
         Gdx.input.setCatchBackKey(true);
     }
 
     @Override
-    protected String retrieveLanguage() {
+    public String retrieveLanguage() {
         String language = Locale.getDefault().getLanguage();
         language = language.toLowerCase();
         return language;
     }
 
-    @Override
-    public void likeOnFB() {
+    private void openURL(String url, String fallbackURL) {
+        try {
+            startActivity(url);
+        } catch (Exception e) {
+            startActivity(fallbackURL);
+        }
+    }
 
+    private void startActivity(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        activity.startActivity(intent);
     }
 
     @Override
     public void twit(String message) {
-        twit(message, "https://play.google.com/store/apps/details?id=" + bundleId);
+        twit(message, "https://play.google.com/store/apps/details?id=" + getBundleId());
     }
 
     @Override
@@ -89,7 +97,7 @@ public abstract class AndroidGame extends DirectedGame {
         // Create intent using ACTION_VIEW and a normal Twitter url:
         String tweetUrl =
                 String.format("https://twitter.com/intent/tweet?text=%s&url=%s",
-                        urlEncode(message), urlEncode(url));
+                        LegoGame.urlEncode(message), LegoGame.urlEncode(url));
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(tweetUrl));
 
         // Narrow down to official Twitter app, if available:
@@ -104,22 +112,8 @@ public abstract class AndroidGame extends DirectedGame {
 
     @Override
     public void openReviewPage() {
-        openURL("market://details?id=" + bundleId,
-                "https://play.google.com/store/apps/details?id=" + bundleId);
+        openURL("market://details?id=" + getBundleId(),
+                "https://play.google.com/store/apps/details?id=" + getBundleId());
 
-    }
-
-
-    private void openURL(String url, String fallbackURL) {
-        try {
-            startActivity(url);
-        } catch (Exception e) {
-            startActivity(fallbackURL);
-        }
-    }
-
-    private void startActivity(String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        activity.startActivity(intent);
     }
 }

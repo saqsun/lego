@@ -6,6 +6,7 @@ dependencies {
         ext.guice_version = '4.0'
     }
     compile "com.google.inject:guice:${guice_version}:no_aop"
+    compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
 }
 
 sourceCompatibility = 1.7
