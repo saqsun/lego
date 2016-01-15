@@ -8,10 +8,17 @@ import com.badlogic.gdx.utils.Pool;
  * Created by khachatur on 1/14/16.
  */
 public class MovementComponent implements Component, Pool.Poolable {
-    public Vector2 velocity = new Vector2();
-    public Vector2 acceleration = new Vector2();
+    public Vector2 velocity;
+    public Vector2 acceleration;
+
+    public MovementComponent() {
+        velocity = new Vector2();
+        acceleration = new Vector2();
+    }
+
     @Override
     public void reset() {
         velocity.set(0, 0);
+        acceleration.set(0, 0);
     }
 }

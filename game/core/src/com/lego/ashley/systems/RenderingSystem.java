@@ -3,7 +3,6 @@ package com.lego.ashley.systems;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -40,9 +39,15 @@ public class RenderingSystem extends SortedIteratingSystem {
         TransformComponent transformComponent = transformComponentMapper.get(entity);
 
         TextureRegion textureRegion = textureComponent.textureRegion;
-        if(textureRegion != null) {
-            batch.draw(textureRegion, transformComponent.getX(), transformComponent.getY(), transformComponent.originX, transformComponent.originY,
-                    transformComponent.getWidth(), transformComponent.getHeight(), transformComponent.scaleX, transformComponent.scaleY, transformComponent.rotation);
+        if (textureRegion != null) {
+            batch.draw(textureRegion, transformComponent.getX(), transformComponent.getY(),
+                    transformComponent.getWidth() * transformComponent.originX,
+                    transformComponent.getHeight() * transformComponent.originY,
+                    transformComponent.getWidth(),
+                    transformComponent.getHeight(),
+                    transformComponent.scaleX,
+                    transformComponent.scaleY,
+                    transformComponent.rotation);
         }
     }
 
