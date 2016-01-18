@@ -1,6 +1,5 @@
 package com.lego.game;
 
-import com.lego.game.assets.SimpleGameAssetsResolver;
 import org.robovm.apple.foundation.*;
 import org.robovm.apple.social.SLComposeViewController;
 import org.robovm.apple.social.SLServiceType;
@@ -9,12 +8,12 @@ import org.robovm.apple.uikit.*;
 /**
  * Created by sargis on 8/5/15.
  */
-public abstract class IOSGame extends DirectedGame {
+public class IOSGame extends LegoGameListenerAdapter {
     private final NSString version;
     private UIAlertView uiAlertView;
 
-    public IOSGame(String id, String storeId, SimpleGameAssetsResolver simpleGameAssetsResolver) {
-        super(id, storeId, simpleGameAssetsResolver);
+    public IOSGame(LegoGame game) {
+        super(game);
         NSDictionary nsDictionary = NSBundle.getMainBundle().getInfoDictionary();
         version = (NSString) nsDictionary.get("CFBundleShortVersionString");
     }
@@ -51,7 +50,7 @@ public abstract class IOSGame extends DirectedGame {
     }
 
     @Override
-    protected String retrieveLanguage() {
+    public String retrieveLanguage() {
         String language = NSLocale.getPreferredLanguages().get(0);
         language = language.toLowerCase();
         return language;
@@ -59,7 +58,7 @@ public abstract class IOSGame extends DirectedGame {
 
     @Override
     public void twit(String message) {
-        twit(message, "https://itunes.apple.com/app/id" + storeId);
+        twit(message, "https://itunes.apple.com/app/id" + game.getBundleId());
     }
 
     @Override
@@ -74,15 +73,15 @@ public abstract class IOSGame extends DirectedGame {
         } else {
             String tweetUrl =
                     String.format("https://twitter.com/intent/tweet?text=%s&url=%s",
-                            urlEncode(message), urlEncode(url));
+                            LegoGame.urlEncode(message), LegoGame.urlEncode(url));
             openURL("", tweetUrl);
         }
     }
 
     @Override
     public void openReviewPage() {
-        openURL("itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=" + storeId,
-                "https://itunes.apple.com/app/id" + storeId);
+        openURL("itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=" + game.getBundleId(),
+                "https://itunes.apple.com/app/id" + game.getBundleId());
     }
 
     @Override
